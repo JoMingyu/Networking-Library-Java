@@ -23,7 +23,7 @@ public class HttpClient {
 	OutputStream out = null;
 	ByteArrayOutputStream res = new ByteArrayOutputStream();
 	
-	public HttpClient() throws IOException, TargetAddressNotDeclaredException {
+	public HttpClient() throws TargetAddressNotDeclaredException {
 		config = new HttpClientConfig();
 		if(config.getTargetAddress() == null) {
 			throw new TargetAddressNotDeclaredException();
@@ -181,7 +181,7 @@ public class HttpClient {
 		
 		while(iterator.hasNext()) {
 			String key = iterator.next();
-			String value = (String) params.get(key);
+			String value = String.valueOf(params.get(key));
 			requestData.append(key).append("=").append(value).append("&");
 		}
 		

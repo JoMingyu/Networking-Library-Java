@@ -1,14 +1,14 @@
 package com.planb.networking.simple.client;
 
 final class HttpClientConfig {
-	private String targetAddress = null;
-	private int targetPort = 80;
+	private static String targetAddress = null;
+	private static int targetPort = 80;
 	
-	private int readTimeout = 3000;
-	private int connectTimeout = 3000;
+	private static int readTimeout = 3000;
+	private static int connectTimeout = 3000;
 	
-	void setTagetAddress(String address) {
-		this.targetAddress = address;
+	void setTargetAddress(String address) {
+		HttpClientConfig.targetAddress = address;
 	}
 	
 	String getTargetAddress() {
@@ -16,7 +16,7 @@ final class HttpClientConfig {
 	}
 	
 	void setTargetPort(int port) {
-		this.targetPort = port;
+		HttpClientConfig.targetPort = port;
 	}
 	
 	int getTargetPort() {
@@ -24,7 +24,7 @@ final class HttpClientConfig {
 	}
 	
 	void setReadTimeout(int readTimeout) {
-		this.readTimeout = readTimeout;
+		HttpClientConfig.readTimeout = readTimeout;
 	}
 	
 	int getReadTimeout() {
@@ -32,7 +32,7 @@ final class HttpClientConfig {
 	}
 	
 	void setConnectTimeout(int connectTimeout) {
-		this.connectTimeout = connectTimeout;
+		HttpClientConfig.connectTimeout = connectTimeout;
 	}
 	
 	int getConnectTimeout() {
