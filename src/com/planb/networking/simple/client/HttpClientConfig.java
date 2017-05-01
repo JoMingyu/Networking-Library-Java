@@ -3,7 +3,6 @@ package com.planb.networking.simple.client;
 final class HttpClientConfig {
 	private String targetAddress = null;
 	private int targetPort = 80;
-	private String requestMethod = null;
 	
 	private int readTimeout = 3000;
 	private int connectTimeout = 3000;
@@ -22,14 +21,6 @@ final class HttpClientConfig {
 	
 	int getTargetPort() {
 		return targetPort;
-	}
-	
-	void setRequestMethod(String method) {
-		this.requestMethod = method;
-	}
-	
-	String getRequestMethod() {
-		return requestMethod;
 	}
 	
 	void setReadTimeout(int readTimeout) {
