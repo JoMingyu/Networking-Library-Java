@@ -34,7 +34,8 @@ public class HttpClient {
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
+			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			out = connection.getOutputStream();
@@ -51,6 +52,9 @@ public class HttpClient {
 	public HashMap<Integer, String> get(String uri, HashMap<String, Object> params) {
 		// Status code와 응답 리턴
 		String requestAddress = createRequestAddress(uri);
+		try {
+			
+		}
 	}
 	
 	private String createRequestAddress(String uri) {
