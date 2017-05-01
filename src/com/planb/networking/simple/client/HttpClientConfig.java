@@ -1,50 +1,50 @@
 package com.planb.networking.simple.client;
 
-public class HttpClientConfig {
-	private static String targetAddress = null;
-	private static int targetPort = 80;
-	private static String requestMethod = null;
+final class HttpClientConfig {
+	private String targetAddress = null;
+	private int targetPort = 80;
+	private String requestMethod = null;
 	
-	private static int readTimeout = 0;
-	private static int connectTimeout = 0;
+	private int readTimeout = 3000;
+	private int connectTimeout = 3000;
 	
-	public static void setTagetAddress(String address) {
-		HttpClientConfig.targetAddress = address;
+	void setTagetAddress(String address) {
+		this.targetAddress = address;
 	}
 	
-	public static String getTargetAddress() {
+	String getTargetAddress() {
 		return targetAddress;
 	}
 	
-	public static void setTargetPort(int port) {
-		HttpClientConfig.targetPort = port;
+	void setTargetPort(int port) {
+		this.targetPort = port;
 	}
 	
-	public static int getTargetPort() {
+	int getTargetPort() {
 		return targetPort;
 	}
 	
-	public static void setRequestMethod(String method) {
-		HttpClientConfig.requestMethod = method;
+	void setRequestMethod(String method) {
+		this.requestMethod = method;
 	}
 	
-	public static String getRequestMethod() {
+	String getRequestMethod() {
 		return requestMethod;
 	}
 	
-	public static void setReadTimeout(int readTimeout) {
-		HttpClientConfig.readTimeout = readTimeout;
+	void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
 	}
 	
-	public static int getReadTimeout() {
+	int getReadTimeout() {
 		return readTimeout;
 	}
 	
-	public static void setConnectTimeout(int connectTimeout) {
-		HttpClientConfig.connectTimeout = connectTimeout;
+	void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
 	}
 	
-	public static int getConnectTimeout() {
+	int getConnectTimeout() {
 		return connectTimeout;
 	}
 }
