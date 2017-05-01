@@ -6,8 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
 
@@ -27,21 +28,46 @@ public class HttpClient {
 		}
 	}
 	
-	public void post(String uri, ArrayList<HashMap<String, Object>> params) {
-		if(config.getTargetAddress().endsWith("/") && uri.startsWith("/")) {
-			uri = uri.substring(1, uri.length());
-		} else if(!config.getTargetAddress().endsWith("/") && !uri.startsWith("/")) {
-			uri = "/" + uri;
+	public int post(String uri, HashMap<String, Object> params) {
+		// Status code 리턴
+		String requestAddress = createRequestAddress(uri);
+		try {
+			url = new URL(requestAddress);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setReadTimeout(config.getReadTimeout());
+			connection.setConnectTimeout(config.getConnectTimeout());
+			out = connection.getOutputStream();
+			out.write(createParamString(params));
+			
+			return connection.getResponseCode();
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+			return 0;
 		}
-		// 비정상 흐름 방지
 	}
 	
-	public String get(String uri, ArrayList<HashMap<String, Object>> params) {
+	public HashMap<Integer, String> get(String uri, HashMap<String, Object> params) {
+		// Status code와 응답 리턴
+		String requestAddress = createRequestAddress(uri);
+	}
+	
+	private String createRequestAddress(String uri) {
 		if(config.getTargetAddress().endsWith("/") && uri.startsWith("/")) {
 			uri = uri.substring(1, uri.length());
 		} else if(!config.getTargetAddress().endsWith("/") && !uri.startsWith("/")) {
 			uri = "/" + uri;
 		}
 		// 비정상 흐름 방지
+		
+		return config.getTargetAddress() + ":" + config.getTargetPort() + uri;
+	}
+	
+	private byte createParamString(HashMap<String, Object> params) {
+		StringBuilder param = new StringBuilder();
+		
+		Set<String> keySet = params.keySet();
+		Iterator<String> iterator = keySet.iterator();
 	}
 }
