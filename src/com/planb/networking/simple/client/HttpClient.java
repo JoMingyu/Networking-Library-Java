@@ -74,7 +74,7 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<Integer, String> get(String uri) {
+	public HashMap<String, Object> get(String uri) {
 		/*
 		 * 파라미터가 없는 get 요청
 		 * status code와 응답 데이터 리턴
@@ -89,17 +89,18 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
-			Map<Integer, String> map = new HashMap<Integer, String>(1);
-			map.put(connection.getResponseCode(), response);
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			map.put("code", connection.getResponseCode());
+			map.put("response", response);
 			
-			return (HashMap<Integer, String>) map;
+			return (HashMap<String, Object>) map;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public HashMap<Integer, String> get(String uri, HashMap<String, Object> params) {
+	public HashMap<String, Object> get(String uri, HashMap<String, Object> params) {
 		/*
 		 * 파라미터가 있는 get 요청
 		 * status code와 응답 데이터 리턴
@@ -114,10 +115,11 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
-			Map<Integer, String> map = new HashMap<Integer, String>(1);
-			map.put(connection.getResponseCode(), response);
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			map.put("code", connection.getResponseCode());
+			map.put("response", response);
 			
-			return (HashMap<Integer, String>) map;
+			return (HashMap<String, Object>) map;
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
