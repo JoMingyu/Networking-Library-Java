@@ -15,13 +15,12 @@ import java.util.Set;
 import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
 
 public class HttpClient {
-	HttpClientConfig config = null;
+	private HttpClientConfig config = null;
 	
-	URL url = null;
-	HttpURLConnection connection = null;
-	InputStream in = null;
-	OutputStream out = null;
-	ByteArrayOutputStream res = new ByteArrayOutputStream();
+	private URL url = null;
+	private HttpURLConnection connection = null;
+	private InputStream in = null;
+	private OutputStream out = null;
 	
 	public HttpClient() throws TargetAddressNotDeclaredException {
 		config = new HttpClientConfig();
@@ -36,11 +35,13 @@ public class HttpClient {
 		 * status code 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
+			// POST 요청 시 DoOutput 활성화
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
@@ -57,16 +58,19 @@ public class HttpClient {
 		 * status code 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
+			// POST 요청 시 DoOutput 활성화
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
 			out = connection.getOutputStream();
 			out.write(createParamBytes(params));
+			// Body 데이터가 있으므로 바이트 형태의 데이터를 전송
 			
 			return connection.getResponseCode();
 		} catch (IOException e) {
@@ -75,12 +79,13 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<Integer, String> get(String uri) {
+	public HashMap<String, Object> get(String uri) {
 		/*
 		 * 파라미터가 없는 get 요청
 		 * status code와 응답 데이터 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
@@ -90,22 +95,25 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
-			Map<Integer, String> map = new HashMap<Integer, String>(1);
-			map.put(connection.getResponseCode(), response);
+			// connection으로 얻은 InputStream에서 응답 얻어오기
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			map.put("code", connection.getResponseCode());
+			map.put("response", response);
 			
-			return (HashMap<Integer, String>) map;
+			return (HashMap<String, Object>) map;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public HashMap<Integer, String> get(String uri, HashMap<String, Object> params) {
+	public HashMap<String, Object> get(String uri, HashMap<String, Object> params) {
 		/*
 		 * 파라미터가 있는 get 요청
 		 * status code와 응답 데이터 리턴
 		 */
 		String requestAddress = createRequestAddress(uri, params);
+		// URI와 파라미터를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
@@ -115,10 +123,12 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
-			Map<Integer, String> map = new HashMap<Integer, String>(1);
-			map.put(connection.getResponseCode(), response);
+			// connection으로 얻은 InputStream에서 응답 얻어오기
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			map.put("code", connection.getResponseCode());
+			map.put("response", response);
 			
-			return (HashMap<Integer, String>) map;
+			return (HashMap<String, Object>) map;
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
