@@ -15,13 +15,12 @@ import java.util.Set;
 import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
 
 public class HttpClient {
-	HttpClientConfig config = null;
+	private HttpClientConfig config = null;
 	
-	URL url = null;
-	HttpURLConnection connection = null;
-	InputStream in = null;
-	OutputStream out = null;
-	ByteArrayOutputStream res = new ByteArrayOutputStream();
+	private URL url = null;
+	private HttpURLConnection connection = null;
+	private InputStream in = null;
+	private OutputStream out = null;
 	
 	public HttpClient() throws TargetAddressNotDeclaredException {
 		config = new HttpClientConfig();
