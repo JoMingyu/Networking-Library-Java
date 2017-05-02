@@ -35,11 +35,13 @@ public class HttpClient {
 		 * status code 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
+			// POST 요청 시 DoOutput 활성화
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
@@ -56,16 +58,19 @@ public class HttpClient {
 		 * status code 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
+			// POST 요청 시 DoOutput 활성화
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
 			out = connection.getOutputStream();
 			out.write(createParamBytes(params));
+			// Body 데이터가 있으므로 바이트 형태의 데이터를 전송
 			
 			return connection.getResponseCode();
 		} catch (IOException e) {
@@ -80,6 +85,7 @@ public class HttpClient {
 		 * status code와 응답 데이터 리턴
 		 */
 		String requestAddress = createRequestAddress(uri);
+		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
@@ -89,6 +95,7 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
+			// connection으로 얻은 InputStream에서 응답 얻어오기
 			Map<String, Object> map = new HashMap<String, Object>(1);
 			map.put("code", connection.getResponseCode());
 			map.put("response", response);
@@ -106,6 +113,7 @@ public class HttpClient {
 		 * status code와 응답 데이터 리턴
 		 */
 		String requestAddress = createRequestAddress(uri, params);
+		// URI와 파라미터를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
@@ -115,6 +123,7 @@ public class HttpClient {
 			
 			in = connection.getInputStream();
 			String response = getResponse(in);
+			// connection으로 얻은 InputStream에서 응답 얻어오기
 			Map<String, Object> map = new HashMap<String, Object>(1);
 			map.put("code", connection.getResponseCode());
 			map.put("response", response);
