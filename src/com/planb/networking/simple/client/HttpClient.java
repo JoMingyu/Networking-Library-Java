@@ -165,11 +165,8 @@ public class HttpClient {
 		requestAddress.append(config.getTargetPort());
 		requestAddress.append(uri);
 		requestAddress.append("?");
-		Set<String> keySet = params.keySet();
-		Iterator<String> iterator = keySet.iterator();
 		
-		while(iterator.hasNext()) {
-			String key = iterator.next();
+		for(String key : params.keySet()) {
 			String value = (String) params.get(key);
 			requestAddress.append(key).append("=").append(value).append("&");
 		}
@@ -186,11 +183,8 @@ public class HttpClient {
 		}
 		
 		StringBuilder requestData = new StringBuilder();
-		Set<String> keySet = params.keySet();
-		Iterator<String> iterator = keySet.iterator();
 		
-		while(iterator.hasNext()) {
-			String key = iterator.next();
+		for(String key : params.keySet()) {
 			String value = String.valueOf(params.get(key));
 			requestData.append(key).append("=").append(value).append("&");
 		}
