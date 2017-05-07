@@ -8,9 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
 
@@ -52,7 +50,7 @@ public class HttpClient {
 		}
 	}
 	
-	public int post(String uri, HashMap<String, Object> params) {
+	public int post(String uri, Map<String, Object> params) {
 		/*
 		 * body data가 있는 post 요청
 		 * status code 리턴
@@ -107,7 +105,7 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<String, Object> get(String uri, HashMap<String, Object> params) {
+	public HashMap<String, Object> get(String uri, Map<String, Object> params) {
 		/*
 		 * 파라미터가 있는 get 요청
 		 * status code와 응답 데이터 리턴
@@ -147,7 +145,7 @@ public class HttpClient {
 		return config.getTargetAddress() + ":" + config.getTargetPort() + uri;
 	}
 	
-	private String createRequestAddress(String uri, HashMap<String, Object> params) {
+	private String createRequestAddress(String uri, Map<String, Object> params) {
 		/*
 		 * 파라미터가 있는 GET 요청에서의 request address
 		 * URI?key=value&key=value 형태
@@ -176,7 +174,7 @@ public class HttpClient {
 		return requestAddressStr;
 	}
 	
-	private byte[] createParamBytes(HashMap<String, Object> params) {
+	private byte[] createParamBytes(Map<String, Object> params) {
 		// POST 메소드에서 사용하는 byte 타입의 body 데이터
 		if(params.size() == 0) {
 			return "".getBytes();
