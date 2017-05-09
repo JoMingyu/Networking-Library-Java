@@ -62,7 +62,7 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
+	public Map<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * get 요청
 		 * status code와 응답 데이터 리턴
@@ -98,7 +98,7 @@ public class HttpClient {
 				map.put("code", 500);
 			}
 			
-			return (HashMap<String, Object>) map;
+			return map;
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
