@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpClient {
-	private HttpClientConfig config = null;
+	private Config config = null;
 	
 	private URL url = null;
 	private HttpURLConnection connection = null;
@@ -20,6 +20,10 @@ public class HttpClient {
 	
 	public HttpClient(HttpClientConfig config) {
 		this.config = config;
+	}
+	
+	public HttpClient() {
+		this.config = new HttpClientDefaultConfig();
 	}
 	
 	public int post(String uri, Map<String, Object> headers, Map<String, Object> params) {
