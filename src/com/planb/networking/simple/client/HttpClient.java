@@ -87,12 +87,16 @@ public class HttpClient {
 				}
 			}
 			
-			in = connection.getInputStream();
-			String response = getResponse(in);
-			// connection으로 얻은 InputStream에서 응답 얻어오기
 			Map<String, Object> map = new HashMap<String, Object>(1);
-			map.put("code", connection.getResponseCode());
-			map.put("response", response);
+			try {
+				in = connection.getInputStream();
+				String response = getResponse(in);
+				// connection으로 얻은 InputStream에서 응답 얻어오기
+				map.put("code", connection.getResponseCode());
+				map.put("response", response);
+			} catch(IOException e) {
+				map.put("code", 500);
+			}
 			
 			return (HashMap<String, Object>) map;
 		} catch(IOException e) {
@@ -157,6 +161,9 @@ public class HttpClient {
 	}
 	
 	private String getResponse(InputStream in) {
+		if(in == null) {
+			return null;
+		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
 		byte[] buf = new byte[1024 * 8];
