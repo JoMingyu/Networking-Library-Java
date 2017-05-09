@@ -11,9 +11,9 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 #### 꼭 필요한 설정
 	HttpClientConfig.setTargetAddress("http://127.0.0.1");
 #### 기본 설정들
-    targetPort = 80
-    readTimeout = 3000
-    connectTimeout = 3000
+	targetPort = 80
+	readTimeout = 3000
+	connectTimeout = 3000
 ### HttpClient 객체 생성해보기
 	try {
 		HttpClient client = new HttpClient();
