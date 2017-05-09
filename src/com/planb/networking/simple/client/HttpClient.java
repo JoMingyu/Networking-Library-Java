@@ -27,7 +27,7 @@ public class HttpClient {
 		}
 	}
 	
-	public int post(String uri, HashMap<String, Object> headers, HashMap<String, Object> params) {
+	public int post(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * post 요청
 		 * status code 리턴
@@ -62,7 +62,7 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<String, Object> get(String uri, HashMap<String, Object> headers, HashMap<String, Object> params) {
+	public HashMap<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * get 요청
 		 * status code와 응답 데이터 리턴
@@ -117,7 +117,7 @@ public class HttpClient {
 		return config.getTargetAddress() + ":" + config.getTargetPort() + uri;
 	}
 	
-	private String createRequestAddress(String uri, HashMap<String, Object> params) {
+	private String createRequestAddress(String uri, Map<String, Object> params) {
 		/*
 		 * 파라미터가 있는 GET 요청에서의 request address
 		 * URI?key=value&key=value 형태
@@ -146,7 +146,7 @@ public class HttpClient {
 		return requestAddressStr;
 	}
 	
-	private byte[] createParamBytes(HashMap<String, Object> params) {
+	private byte[] createParamBytes(Map<String, Object> params) {
 		// POST 메소드에서 사용하는 byte 타입의 body 데이터
 		StringBuilder requestData = new StringBuilder();
 		
