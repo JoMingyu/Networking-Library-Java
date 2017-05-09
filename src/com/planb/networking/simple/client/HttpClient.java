@@ -10,8 +10,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
-
 public class HttpClient {
 	private HttpClientConfig config = null;
 	
@@ -20,11 +18,8 @@ public class HttpClient {
 	private InputStream in = null;
 	private OutputStream out = null;
 	
-	public HttpClient() throws TargetAddressNotDeclaredException {
-		config = new HttpClientConfig();
-		if(config.getTargetAddress() == null) {
-			throw new TargetAddressNotDeclaredException();
-		}
+	public HttpClient(HttpClientConfig config) {
+		this.config = config;
 	}
 	
 	public int post(String uri, Map<String, Object> headers, Map<String, Object> params) {
