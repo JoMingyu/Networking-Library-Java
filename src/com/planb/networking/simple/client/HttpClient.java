@@ -55,6 +55,7 @@ public class HttpClient {
 				out.flush();
 			}
 			
+			connection.disconnect();
 			return connection.getResponseCode();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,7 +63,7 @@ public class HttpClient {
 		}
 	}
 	
-	public Map<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
+	public HashMap<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * get 요청
 		 * status code와 응답 데이터 리턴
@@ -98,7 +99,8 @@ public class HttpClient {
 				map.put("code", 500);
 			}
 			
-			return map;
+			connection.disconnect();
+			return (HashMap<String, Object>) map;
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
@@ -166,7 +168,7 @@ public class HttpClient {
 		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
-		byte[] buf = new byte[1024 * 8];
+		byte[] buf = new byte[1024 * 128];
 		int length;
 		
 		try {
