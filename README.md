@@ -24,14 +24,16 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 	config.setTargetAddress("http://127.0.0.1");
 	HttpClient client = new HttpClient();
 ##### 원리 : 생성자 오버로딩
-	private Config config = null;
+	public class HttpClient {
+		private Config config = null;
 	
-	public HttpClient(HttpClientConfig config) {
-		this.config = config;
-	}
+		public HttpClient(HttpClientConfig config) {
+			this.config = config;
+		}
 	
-	public HttpClient() {
-		this.config = new HttpClientDefaultConfig();
+		public HttpClient() {
+			this.config = new HttpClientDefaultConfig();
+		}
 	}
 ### HTTP 요청 보내기 : GET
 #### 헤더와 파라미터가 없는 GET 요청
