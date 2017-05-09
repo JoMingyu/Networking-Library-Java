@@ -2,58 +2,49 @@
 HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 Java 라이브러리
 
 ## 사용
-### 초기 구성
+### 설정
 	HttpClientConfig config = new HttpClientConfig();
 	config.setTargetAddress("http://127.0.0.1");
 	config.setTargetPort(5000);
 	config.setReadTimeout(1500);
 	config.setConnectTimeout(1500);
 #### 꼭 필요한 설정
-	HttpClientConfig.setTargetAddress("http://127.0.0.1");
-#### 기본 설정들
+	config.setTargetAddress("http://127.0.0.1");
+#### 다른 데이터들을 따로 설정하지 않았을 경우
 	targetPort = 80
 	readTimeout = 3000
 	connectTimeout = 3000
 ### HttpClient 객체 생성해보기
-	try {
-		HttpClient client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
+	HttpClientConfig config = new HttpClientConfig();
+	config.setTargetAddress("http://127.0.0.1");
+	HttpClient client = new HttpClient(config);
+### 언제나 똑같은 설정을 사용하고 싶은 경우
+##### HttpClientDefaultConfig 클래스 사용, HttpClient의 생성자에 아무것도 보내지 않음
+	HttpClientDefaultConfig config = new HttpClientDefaultConfig();
+	config.setTargetAddress("http://127.0.0.1");
+	HttpClient client = new HttpClient();
+##### 원리 : 생성자 오버로딩
+	private Config config = null;
+	
+	public HttpClient(HttpClientConfig config) {
+		this.config = config;
 	}
-#### try-catch 블럭 아끼기
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
+	
+	public HttpClient() {
+		this.config = new HttpClientDefaultConfig();
 	}
 ### HTTP 요청 보내기 : GET
 #### 헤더와 파라미터가 없는 GET 요청
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	client.get("/test-uri", new HashMap<String, Object>(), new HashMap<String, Object>());
 #### GET 요청에 헤더 붙이기
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	Map<String, Object> headers = new HashMap<String, Object>();
 	headers.put("header", "value");
 	
 	client.get("/test-uri", headers, new HashMap<String, Object>());
 #### 헤더와 파라미터가 있는 GET 요청
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	Map<String, Object> headers = new HashMap<String, Object>();
 	headers.put("header", "value");
 	
@@ -67,31 +58,16 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 	int responseCode = Integer.valueOf(responseMap.get("code").toString());
 ### HTTP 요청 보내기 : POST
 #### 요청 본문이 없는 POST 요청
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	client.post("/test-uri", new HashMap<String, Object>(), new HashMap<String, Object>());
 #### 헤더가 있는 POST 요청
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	Map<String, Object> headers = new HashMap<String, Object>();
 	headers.put("header", "value");
 	
 	client.post("/test-uri", headers, new HashMap<String, Object>());
 #### 헤더와 요청 본문이 있는 POST 요청
-	HttpClient client = null;
-	try {
-		client = new HttpClient();
-	} catch (TargetAddressNotDeclaredException e) {
-		e.printStackTrace();
-	}
+	HttpClient client = new HttpClient(config);
 	Map<String, Object> headers = new HashMap<String, Object>();
 	headers.put("header", "value");
 	
