@@ -1,6 +1,6 @@
 package com.planb.networking.simple.client;
 
-public class HttpClientConfig extends Config {
+public class Config {
 	private String targetAddress = null;
 	private int targetPort = 80;
 
