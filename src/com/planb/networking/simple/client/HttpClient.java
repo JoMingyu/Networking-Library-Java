@@ -8,9 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import com.planb.networking.simple.exceptions.TargetAddressNotDeclaredException;
 
@@ -29,7 +27,7 @@ public class HttpClient {
 		}
 	}
 	
-	public int post(String uri, HashMap<String, Object> headers, HashMap<String, Object> params) {
+	public int post(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * post 요청
 		 * status code 리턴
@@ -55,6 +53,7 @@ public class HttpClient {
 				out = connection.getOutputStream();
 				out.write(createParamBytes(params));
 				// Body 데이터가 있으면 바이트 형태의 데이터를 전송
+				out.flush();
 			}
 			
 			return connection.getResponseCode();
@@ -64,7 +63,7 @@ public class HttpClient {
 		}
 	}
 	
-	public HashMap<String, Object> get(String uri, HashMap<String, Object> headers, HashMap<String, Object> params) {
+	public Map<String, Object> get(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * get 요청
 		 * status code와 응답 데이터 리턴
@@ -89,14 +88,18 @@ public class HttpClient {
 				}
 			}
 			
-			in = connection.getInputStream();
-			String response = getResponse(in);
-			// connection으로 얻은 InputStream에서 응답 얻어오기
 			Map<String, Object> map = new HashMap<String, Object>(1);
-			map.put("code", connection.getResponseCode());
-			map.put("response", response);
+			try {
+				in = connection.getInputStream();
+				String response = getResponse(in);
+				// connection으로 얻은 InputStream에서 응답 얻어오기
+				map.put("code", connection.getResponseCode());
+				map.put("response", response);
+			} catch(IOException e) {
+				map.put("code", 500);
+			}
 			
-			return (HashMap<String, Object>) map;
+			return map;
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
@@ -115,7 +118,7 @@ public class HttpClient {
 		return config.getTargetAddress() + ":" + config.getTargetPort() + uri;
 	}
 	
-	private String createRequestAddress(String uri, HashMap<String, Object> params) {
+	private String createRequestAddress(String uri, Map<String, Object> params) {
 		/*
 		 * 파라미터가 있는 GET 요청에서의 request address
 		 * URI?key=value&key=value 형태
@@ -144,7 +147,7 @@ public class HttpClient {
 		return requestAddressStr;
 	}
 	
-	private byte[] createParamBytes(HashMap<String, Object> params) {
+	private byte[] createParamBytes(Map<String, Object> params) {
 		// POST 메소드에서 사용하는 byte 타입의 body 데이터
 		StringBuilder requestData = new StringBuilder();
 		
@@ -159,6 +162,9 @@ public class HttpClient {
 	}
 	
 	private String getResponse(InputStream in) {
+		if(in == null) {
+			return null;
+		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		
 		byte[] buf = new byte[1024 * 8];
