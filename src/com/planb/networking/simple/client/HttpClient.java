@@ -53,6 +53,7 @@ public class HttpClient {
 				out = connection.getOutputStream();
 				out.write(createParamBytes(params));
 				// Body 데이터가 있으면 바이트 형태의 데이터를 전송
+				out.flush();
 			}
 			
 			return connection.getResponseCode();
