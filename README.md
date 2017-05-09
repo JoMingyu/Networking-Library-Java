@@ -104,5 +104,3 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 ### 단일 URI의 슬래시(/) 생략하기
 	client.get("test-uri", headers, params);
 	client.post("test-uri", headers, params);
-### 이 라이브러리의 단점
-  - 2개 이상의 URL에 전송을 보내기 불편함(HttpClientConfig의 필드들이 static으로 관리됨)
