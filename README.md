@@ -3,7 +3,7 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 
 ## 사용
 ### 설정
-	HttpClientConfig config = new HttpClientConfig();
+	Config config = new HttpClientConfig();
 	config.setTargetAddress("http://127.0.0.1");
 	config.setTargetPort(5000);
 	config.setReadTimeout(1500);
@@ -15,12 +15,12 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 	readTimeout = 3000
 	connectTimeout = 3000
 ### HttpClient 객체 생성해보기
-	HttpClientConfig config = new HttpClientConfig();
+	Config config = new HttpClientConfig();
 	config.setTargetAddress("http://127.0.0.1");
 	HttpClient client = new HttpClient(config);
 ### 언제나 똑같은 설정을 사용하고 싶은 경우
 ##### HttpClientDefaultConfig 클래스 사용, HttpClient의 생성자에 아무것도 보내지 않음
-	HttpClientDefaultConfig config = new HttpClientDefaultConfig();
+	Config config = new HttpClientDefaultConfig();
 	config.setTargetAddress("http://127.0.0.1");
 	HttpClient client = new HttpClient();
 ##### 원리 : 생성자 오버로딩
