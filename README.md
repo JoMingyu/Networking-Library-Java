@@ -77,7 +77,9 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 	params.put("key", "value");
 	
 	client.post("/test-uri", headers, params);
-#### POST 요청의 응답 코드 얻어오기
+	String response = responseMap.get("response").toString();
+	int responseCode = Integer.valueOf(responseMap.get("code").toString());
+#### POST 요청의 응답 얻어오기
 	int responseCode = client.post("/test-uri", headers, params);
 ### 단일 URI의 슬래시(/) 생략하기
 	client.get("test-uri", headers, params);
