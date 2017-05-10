@@ -2,6 +2,8 @@
 HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 Java 라이브러리
 
 ## 사용
+### 조건
+JSON 라이브러리 필요
 ### 설정
 	Config config = new HttpClientConfig();
 	config.setTargetAddress("http://127.0.0.1");
