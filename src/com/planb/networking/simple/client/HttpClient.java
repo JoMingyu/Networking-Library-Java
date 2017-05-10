@@ -3,10 +3,13 @@ package com.planb.networking.simple.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.json.JSONObject;
 
 public class HttpClient {
 	private Config config = null;
@@ -15,6 +18,7 @@ public class HttpClient {
 	private HttpURLConnection connection = null;
 	private InputStream in = null;
 	private OutputStream out = null;
+	private OutputStreamWriter wr = null;
 	
 	public HttpClient(HttpClientConfig config) {
 		this.config = config;
@@ -52,6 +56,40 @@ public class HttpClient {
 				// Body 데이터가 있으면 바이트 형태의 데이터를 전송
 				out.flush();
 			}
+			
+			connection.disconnect();
+			return connection.getResponseCode();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public int post(String uri, Map<String, Object> headers, JSONObject requestObject) {
+		/*
+		 * post 요청 : 본문 데이터가 JSON
+		 * status code 리턴
+		 */
+		String requestAddress = NetworkingHelper.createRequestAddress(config, uri);
+		// URI를 통해 요청 주소 얻어오기
+		try {
+			url = new URL(requestAddress);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("POST");
+			connection.setDoOutput(true);
+			// POST 요청 시 DoOutput 활성화
+			connection.setReadTimeout(config.getReadTimeout());
+			connection.setConnectTimeout(config.getConnectTimeout());
+			
+			if(headers.size() > 0) {
+				for(String key : headers.keySet()) {
+					connection.setRequestProperty(key, (String) headers.get(key));
+				}
+			}
+			
+			wr = new OutputStreamWriter(connection.getOutputStream());
+			wr.write(requestObject.toString());
+			wr.flush();
 			
 			connection.disconnect();
 			return connection.getResponseCode();
