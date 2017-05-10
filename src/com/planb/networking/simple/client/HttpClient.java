@@ -20,7 +20,7 @@ public class HttpClient {
 	private OutputStream out = null;
 	private OutputStreamWriter wr = null;
 	
-	public HttpClient(HttpClientConfig config) {
+	public HttpClient(Config config) {
 		this.config = config;
 	}
 	
@@ -28,7 +28,7 @@ public class HttpClient {
 		this.config = new HttpClientDefaultConfig();
 	}
 	
-	public int post(String uri, Map<String, Object> headers, Map<String, Object> params) {
+	public HashMap<String, Object> post(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * post 요청
 		 * status code 리턴
@@ -57,15 +57,26 @@ public class HttpClient {
 				out.flush();
 			}
 			
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			try {
+				in = connection.getInputStream();
+				String response = NetworkingHelper.getResponse(in);
+				// connection으로 얻은 InputStream에서 응답 얻어오기
+				map.put("code", connection.getResponseCode());
+				map.put("response", response);
+			} catch(IOException e) {
+				map.put("code", 500);
+			}
+			
 			connection.disconnect();
-			return connection.getResponseCode();
+			return (HashMap<String, Object>) map;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return 0;
+			return null;
 		}
 	}
 	
-	public int post(String uri, Map<String, Object> headers, JSONObject requestObject) {
+	public HashMap<String, Object> post(String uri, Map<String, Object> headers, JSONObject requestObject) {
 		/*
 		 * post 요청 : 본문 데이터가 JSON
 		 * status code 리턴
@@ -91,11 +102,22 @@ public class HttpClient {
 			wr.write(requestObject.toString());
 			wr.flush();
 			
+			Map<String, Object> map = new HashMap<String, Object>(1);
+			try {
+				in = connection.getInputStream();
+				String response = NetworkingHelper.getResponse(in);
+				// connection으로 얻은 InputStream에서 응답 얻어오기
+				map.put("code", connection.getResponseCode());
+				map.put("response", response);
+			} catch(IOException e) {
+				map.put("code", 500);
+			}
+			
 			connection.disconnect();
-			return connection.getResponseCode();
+			return (HashMap<String, Object>) map;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return 0;
+			return null;
 		}
 	}
 	
