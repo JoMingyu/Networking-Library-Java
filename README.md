@@ -57,9 +57,10 @@ JSON 라이브러리 필요
 	
 	client.get("/test-uri", headers, params);
 #### GET 요청의 응답 얻어오기
-	Map<String, Object> responseMap = client.get("/test-uri", headers, params);
-	String response = responseMap.get("response").toString();
-	int responseCode = Integer.valueOf(responseMap.get("code").toString());
+	Response response = client.get("/test-uri", headers, params);
+	Map<String, List<String>> header = response.getResponseHeader();
+	String responseBody = response.getResponseBody();
+	int responseCode = response.getResponseCode();
 ### HTTP 요청 보내기 : POST
 #### 요청 본문이 없는 POST 요청
 	HttpClient client = new HttpClient(config);
@@ -82,7 +83,10 @@ JSON 라이브러리 필요
 	String response = responseMap.get("response").toString();
 	int responseCode = Integer.valueOf(responseMap.get("code").toString());
 #### POST 요청의 응답 얻어오기
-	int responseCode = client.post("/test-uri", headers, params);
+	Response response = client.post("/test-uri", headers, params);
+	Map<String, List<String>> header = response.getResponseHeader();
+	String responseBody = response.getResponseBody();
+	int responseCode = response.getResponseCode();
 ### 단일 URI의 슬래시(/) 생략하기
 	client.get("test-uri", headers, params);
 	client.post("test-uri", headers, params);
