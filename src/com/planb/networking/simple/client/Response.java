@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Response {
-	private Response() { }
-	
 	private Map<String, List<String>> responseHeader = new HashMap<String, List<String>>();
 	private String responseBody;
 	private int responseCode;
