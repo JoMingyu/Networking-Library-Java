@@ -161,7 +161,7 @@ public class HttpClient {
 		 * status code 리턴
 		 */
 		String requestAddress = null;
-		if(params.size() > 0) {
+		if(params != null && params.size() > 0) {
 			requestAddress = NetworkingHelper.createRequestAddress(config, uri, params);
 			// URI와 파라미터를 통해 요청 주소 얻어오기
 		} else {
@@ -174,7 +174,7 @@ public class HttpClient {
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
-			if(headers.size() > 0) {
+			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
 					connection.setRequestProperty(key, (String) headers.get(key));
 				}
