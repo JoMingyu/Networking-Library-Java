@@ -1,4 +1,4 @@
-package com.planb.networking.simple.client;
+package com.planb.networking.simple;
 
 public class HttpClientConfig extends Config {
 	private String targetAddress = null;

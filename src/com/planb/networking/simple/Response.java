@@ -1,4 +1,4 @@
-package com.planb.networking.simple.client;
+package com.planb.networking.simple;
 
 import java.util.HashMap;
 import java.util.List;

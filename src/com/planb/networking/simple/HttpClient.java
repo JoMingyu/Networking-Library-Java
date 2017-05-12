@@ -1,4 +1,4 @@
-package com.planb.networking.simple.client;
+package com.planb.networking.simple;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,13 +43,13 @@ public class HttpClient {
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
-			if(headers.size() > 0) {
+			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
 					connection.setRequestProperty(key, (String) headers.get(key));
 				}
 			}
 			
-			if(params.size() > 0) {
+			if(params != null && params.size() > 0) {
 				out = connection.getOutputStream();
 				out.write(NetworkingHelper.createParamBytes(params));
 				// Body 데이터가 있으면 바이트 형태의 데이터를 전송
@@ -88,7 +88,7 @@ public class HttpClient {
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
-			if(headers.size() > 0) {
+			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
 					connection.setRequestProperty(key, (String) headers.get(key));
 				}
@@ -120,7 +120,7 @@ public class HttpClient {
 		 * status code와 응답 데이터 리턴
 		 */
 		String requestAddress = null;
-		if(params.size() > 0) {
+		if(params != null && params.size() > 0) {
 			requestAddress = NetworkingHelper.createRequestAddress(config, uri, params);
 			// URI와 파라미터를 통해 요청 주소 얻어오기
 		} else {
@@ -133,7 +133,7 @@ public class HttpClient {
 			connection.setReadTimeout(config.getReadTimeout());
 			connection.setConnectTimeout(config.getConnectTimeout());
 			
-			if(headers.size() > 0) {
+			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
 					connection.setRequestProperty(key, (String) headers.get(key));
 				}
