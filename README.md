@@ -80,8 +80,6 @@ JSON 라이브러리 필요
 	params.put("key", "value");
 	
 	client.post("/test-uri", headers, params);
-	String response = responseMap.get("response").toString();
-	int responseCode = Integer.valueOf(responseMap.get("code").toString());
 #### POST 요청의 응답 얻어오기
 	Response response = client.post("/test-uri", headers, params);
 	Map<String, List<String>> header = response.getResponseHeader();
