@@ -1,7 +1,6 @@
 package com.planb.networking;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -18,7 +17,6 @@ public class HttpClient {
 	private int connectTimeout = 3000;
 	
 	private HttpURLConnection connection = null;
-	private InputStream in = null;
 	private OutputStream out = null;
 	private OutputStreamWriter wr = null;
 	
@@ -67,16 +65,7 @@ public class HttpClient {
 				out.flush();
 			}
 			
-			Response response = new Response();
-			in = connection.getInputStream();
-			String responseBody = NetworkingHelper.getResponse(in);
-			// connection으로 얻은 InputStream에서 응답 얻어오기
-			response.setResponseBody(responseBody);
-			response.setResponseCode(connection.getResponseCode());
-			response.setResponseHeader(connection.getHeaderFields());
-			
-			connection.disconnect();
-			return response;
+			return NetworkingHelper.getResponse(connection);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -109,16 +98,7 @@ public class HttpClient {
 			wr.write(requestObject.toString());
 			wr.flush();
 			
-			Response response = new Response();
-			in = connection.getInputStream();
-			String responseBody = NetworkingHelper.getResponse(in);
-			// connection으로 얻은 InputStream에서 응답 얻어오기
-			response.setResponseBody(responseBody);
-			response.setResponseCode(connection.getResponseCode());
-			response.setResponseHeader(connection.getHeaderFields());
-			
-			connection.disconnect();
-			return response;
+			return NetworkingHelper.getResponse(connection);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -151,23 +131,14 @@ public class HttpClient {
 				}
 			}
 			
-			Response response = new Response();
-			in = connection.getInputStream();
-			String responseBody = NetworkingHelper.getResponse(in);
-			// connection으로 얻은 InputStream에서 응답 얻어오기
-			response.setResponseBody(responseBody);
-			response.setResponseCode(connection.getResponseCode());
-			response.setResponseHeader(connection.getHeaderFields());
-			
-			connection.disconnect();
-			return response;
+			return NetworkingHelper.getResponse(connection);
 		} catch(IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-	public int delete(String uri, Map<String, Object> headers, Map<String, Object> params) {
+	public Response delete(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		/*
 		 * delete 요청
 		 * status code 리턴
@@ -193,11 +164,10 @@ public class HttpClient {
 				}
 			}
 			
-			connection.disconnect();
-			return connection.getResponseCode();
+			return NetworkingHelper.getResponse(connection);
 		} catch(IOException e) {
 			e.printStackTrace();
-			return 0;
+			return null;
 		}
 	}
 }

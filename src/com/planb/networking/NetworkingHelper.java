@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 import java.util.Map;
 
@@ -21,15 +22,15 @@ public class NetworkingHelper {
 	}
 	
 	static String createRequestAddress(String targetAddress, String uri) {
-		// POST 요청 또는 파라미터가 없는 GET 요청에서의 request address
+		// POST request or GET request with no parameter
 		
 		return validateUri(targetAddress, uri);
 	}
 	
 	static String createRequestAddress(String targetAddress, String uri, Map<String, Object> params) {
 		/*
-		 * 파라미터가 있는 GET 요청에서의 request address
-		 * URI?key=value&key=value 형태
+		 * GET request with parameter
+		 * URI?key=value&key=value
 		 */
 		
 		StringBuilder requestAddress = new StringBuilder();
@@ -49,7 +50,8 @@ public class NetworkingHelper {
 	}
 	
 	static byte[] createParamBytes(Map<String, Object> params) {
-		// POST 메소드에서 사용하는 byte 타입의 body 데이터
+		// Body data to byte[]
+		
 		StringBuilder requestData = new StringBuilder();
 		
 		for(String key : params.keySet()) {
@@ -66,7 +68,16 @@ public class NetworkingHelper {
 		return requestAddressStr.getBytes();
 	}
 	
-	static String getResponse(InputStream in) {
+	static Response getResponse(HttpURLConnection connection) {
+		// Get response from response
+		
+		InputStream in = null;
+		try {
+			in = connection.getInputStream();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		if(in == null) {
 			return null;
 		}
@@ -82,11 +93,19 @@ public class NetworkingHelper {
 			e.printStackTrace();
 		}
 		
+		Response response = new Response();;
+		
 		try {
-			return new String(out.toByteArray(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+			String responseBody = new String(out.toByteArray(), "UTF-8");
+			response.setResponseBody(responseBody);
+			response.setResponseHeader(connection.getHeaderFields());
+			response.setResponseCode(connection.getResponseCode());
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
+		
+		connection.disconnect();
+		return response;
 	}
 }
