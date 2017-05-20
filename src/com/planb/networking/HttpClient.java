@@ -21,7 +21,7 @@ public class HttpClient {
 	private OutputStreamWriter wr = null;
 	
 	public HttpClient(String targetAddress, int port, int readTimeout, int connectTimeout) {
-		// HttpClient constructor with address, port, timeouts
+		// Constructor with address, port, timeouts
 		
 		if(targetAddress.endsWith("/")) {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
@@ -33,7 +33,8 @@ public class HttpClient {
 	}
 	
 	public HttpClient(String targetAddress, int port) {
-		// HttpClient constructor with address, port
+		// Constructor with address, port
+		
 		if(targetAddress.endsWith("/")) {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
 		}
@@ -42,12 +43,21 @@ public class HttpClient {
 	}
 	
 	public HttpClient(String targetAddress) {
-		// HttpClient constructor with address
+		// Constructor with address
+		
 		if(targetAddress.endsWith("/")) {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
 		}
 		
 		this.targetAddress = targetAddress;
+	}
+	
+	public HttpClient(Config config) {
+		// Constructor with config
+		
+		this.targetAddress = config.getTargetAddress();
+		this.readTimeout = config.getReadTimeout();
+		this.connectTimeout = config.getConnectTimeout();
 	}
 	
 	public Response post(String uri, Map<String, Object> headers, Map<String, Object> params) {
