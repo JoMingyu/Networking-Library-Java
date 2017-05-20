@@ -43,7 +43,7 @@ public class HttpClient {
 		 * post 요청
 		 * status code 리턴
 		 */
-		String requestAddress = NetworkingHelper.createRequestAddress(targetAddress, uri);
+		String requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
 		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
@@ -51,8 +51,8 @@ public class HttpClient {
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
 			// POST 요청 시 DoOutput 활성화
-			connection.setReadTimeout(config.getReadTimeout());
-			connection.setConnectTimeout(config.getConnectTimeout());
+			connection.setReadTimeout(this.readTimeout);
+			connection.setConnectTimeout(this.connectTimeout);
 			
 			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
@@ -88,7 +88,7 @@ public class HttpClient {
 		 * post 요청 : 본문 데이터가 JSON
 		 * status code 리턴
 		 */
-		String requestAddress = NetworkingHelper.createRequestAddress(config, uri);
+		String requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
 		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);
@@ -96,8 +96,8 @@ public class HttpClient {
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);
 			// POST 요청 시 DoOutput 활성화
-			connection.setReadTimeout(config.getReadTimeout());
-			connection.setConnectTimeout(config.getConnectTimeout());
+			connection.setReadTimeout(this.readTimeout);
+			connection.setConnectTimeout(this.connectTimeout);
 			
 			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
@@ -132,17 +132,18 @@ public class HttpClient {
 		 */
 		String requestAddress = null;
 		if(params != null && params.size() > 0) {
-			requestAddress = NetworkingHelper.createRequestAddress(config, uri, params);
-			// URI와 파라미터를 통해 요청 주소 얻어오기
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri, params);
+			// Request address with uri and parameter
 		} else {
-			requestAddress = NetworkingHelper.createRequestAddress(config, uri);
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
+			// Request address with uri
 		}
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
-			connection.setReadTimeout(config.getReadTimeout());
-			connection.setConnectTimeout(config.getConnectTimeout());
+			connection.setReadTimeout(this.readTimeout);
+			connection.setConnectTimeout(this.connectTimeout);
 			
 			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
@@ -173,17 +174,18 @@ public class HttpClient {
 		 */
 		String requestAddress = null;
 		if(params != null && params.size() > 0) {
-			requestAddress = NetworkingHelper.createRequestAddress(config, uri, params);
-			// URI와 파라미터를 통해 요청 주소 얻어오기
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri, params);
+			// Request address with uri and parameter
 		} else {
-			requestAddress = NetworkingHelper.createRequestAddress(config, uri);
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
+			// Request address with uri
 		}
 		try {
 			url = new URL(requestAddress);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("DELETE");
-			connection.setReadTimeout(config.getReadTimeout());
-			connection.setConnectTimeout(config.getConnectTimeout());
+			connection.setReadTimeout(this.readTimeout);
+			connection.setConnectTimeout(this.connectTimeout);
 			
 			if(headers != null && headers.size() > 0) {
 				for(String key : headers.keySet()) {
