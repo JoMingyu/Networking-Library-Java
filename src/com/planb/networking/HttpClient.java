@@ -11,20 +11,26 @@ import java.util.Map;
 import org.json.JSONObject;
 
 public class HttpClient {
-	private Config config = null;
-	
-	private URL url = null;
+	private String targetAddress;
 	private HttpURLConnection connection = null;
 	private InputStream in = null;
 	private OutputStream out = null;
 	private OutputStreamWriter wr = null;
 	
-	public HttpClient(Config config) {
-		this.config = config;
+	public HttpClient(String targetAddress, int port) {
+		if(targetAddress.endsWith("/")) {
+			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+		}
+		
+		this.targetAddress = port == 80 ? targetAddress : targetAddress + ":" + port;
 	}
 	
-	public HttpClient() {
-		this.config = new HttpClientDefaultConfig();
+	public HttpClient(String targetAddress) {
+		if(targetAddress.endsWith("/")) {
+			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+		}
+		
+		this.targetAddress = targetAddress;
 	}
 	
 	public Response post(String uri, Map<String, Object> headers, Map<String, Object> params) {
@@ -32,7 +38,7 @@ public class HttpClient {
 		 * post 요청
 		 * status code 리턴
 		 */
-		String requestAddress = NetworkingHelper.createRequestAddress(config, uri);
+		String requestAddress = NetworkingHelper.createRequestAddress(targetAddress, uri);
 		// URI를 통해 요청 주소 얻어오기
 		try {
 			url = new URL(requestAddress);

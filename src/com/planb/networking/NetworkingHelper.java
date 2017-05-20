@@ -8,29 +8,13 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class NetworkingHelper {
-	private static String validateUri(Config config, String uri) {
-		if(config.getTargetAddress().endsWith("/") && uri.startsWith("/")) {
-			// Escape double slash
-			uri = uri.substring(1, uri.length());
-		} else if(!config.getTargetAddress().endsWith("/") && !uri.startsWith("/")) {
-			// Escape no slash
-			uri = "/" + uri;
-		}
-		// 비정상 URI 방지
+	private static String validateUri(String targetAddress, String uri) {
 		
-		if(uri.endsWith("/")) {
-			// Escape end with slash
-			uri = uri.substring(0, uri.length() - 1);
-		}
 		
-		if(config.getTargetPort() == 80) {
-			return config.getTargetAddress() + uri;
-		} else {
-			return config.getTargetAddress() + ":" + config.getTargetPort() + uri;
-		}
+		return targetAddress + uri;
 	}
 	
-	static String createRequestAddress(Config config, String uri) {
+	static String createRequestAddress(String targetAddress, String uri) {
 		// POST 요청 또는 파라미터가 없는 GET 요청에서의 request address
 		
 		return validateUri(config, uri);
