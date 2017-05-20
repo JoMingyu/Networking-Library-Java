@@ -12,6 +12,11 @@ import org.json.JSONObject;
 
 public class HttpClient {
 	private String targetAddress;
+	private URL url;
+	
+	private int readTimeout = 3000;
+	private int connectTimeout = 3000;
+	
 	private HttpURLConnection connection = null;
 	private InputStream in = null;
 	private OutputStream out = null;

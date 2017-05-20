@@ -9,7 +9,13 @@ import java.util.Map;
 
 public class NetworkingHelper {
 	private static String validateUri(String targetAddress, String uri) {
+		if(uri.endsWith("/")) {
+			uri = uri.substring(0, uri.length() - 1);
+		}
 		
+		if(!uri.startsWith("/")) {
+			uri = "/" + uri;
+		}
 		
 		return targetAddress + uri;
 	}
@@ -17,17 +23,17 @@ public class NetworkingHelper {
 	static String createRequestAddress(String targetAddress, String uri) {
 		// POST 요청 또는 파라미터가 없는 GET 요청에서의 request address
 		
-		return validateUri(config, uri);
+		return validateUri(targetAddress, uri);
 	}
 	
-	static String createRequestAddress(Config config, String uri, Map<String, Object> params) {
+	static String createRequestAddress(String targetAddress, String uri, Map<String, Object> params) {
 		/*
 		 * 파라미터가 있는 GET 요청에서의 request address
 		 * URI?key=value&key=value 형태
 		 */
 		
 		StringBuilder requestAddress = new StringBuilder();
-		requestAddress.append(validateUri(config, uri)).append("?");
+		requestAddress.append(validateUri(targetAddress, uri)).append("?");
 		for(String key : params.keySet()) {
 			String value = (String) params.get(key);
 			try {
