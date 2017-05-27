@@ -2,41 +2,18 @@
 HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 Java 라이브러리
 
 ## 사용
-### 조건
-JSON 라이브러리 필요
-### 설정
-	Config config = new HttpClientConfig();
-	config.setTargetAddress("http://127.0.0.1");
-	config.setTargetPort(5000);
-	config.setReadTimeout(1500);
-	config.setConnectTimeout(1500);
-#### 꼭 필요한 설정
-	config.setTargetAddress("http://127.0.0.1");
-#### 다른 데이터들을 따로 설정하지 않았을 경우
-	targetPort = 80
-	readTimeout = 3000
-	connectTimeout = 3000
+### 프로젝트 구성
+JSON 라이브러리가 적용된 Maven 프로젝트
 ### HttpClient 객체 생성해보기
-	Config config = new HttpClientConfig();
-	config.setTargetAddress("http://127.0.0.1");
-	HttpClient client = new HttpClient(config);
-### 언제나 똑같은 설정을 사용하고 싶은 경우
-##### HttpClientDefaultConfig 클래스 사용, HttpClient의 생성자에 아무것도 보내지 않음
-	Config config = new HttpClientDefaultConfig();
+	HttpClient client = new HttpClient();
+### 객체 생성의 여러가지 방법
+#### 추가 필요
+### Config 객체 사용하기
+	Config config = new Config();
 	config.setTargetAddress("http://127.0.0.1");
 	HttpClient client = new HttpClient();
-##### 원리 : 생성자 오버로딩
-	public class HttpClient {
-		private Config config = null;
-	
-		public HttpClient(HttpClientConfig config) {
-			this.config = config;
-		}
-	
-		public HttpClient() {
-			this.config = new HttpClientDefaultConfig();
-		}
-	}
+### Config 객체 생성의 여러가지 방법
+#### 추가 필요
 ### HTTP 요청 보내기 : GET
 #### 헤더와 파라미터가 없는 GET 요청
 	HttpClient client = new HttpClient(config);
@@ -80,8 +57,6 @@ JSON 라이브러리 필요
 	params.put("key", "value");
 	
 	client.post("/test-uri", headers, params);
-	String response = responseMap.get("response").toString();
-	int responseCode = Integer.valueOf(responseMap.get("code").toString());
 #### POST 요청의 응답 얻어오기
 	Response response = client.post("/test-uri", headers, params);
 	Map<String, List<String>> header = response.getResponseHeader();
