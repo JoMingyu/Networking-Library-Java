@@ -18,8 +18,8 @@ Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가�
 	HttpClient client = new HttpClient(“http://127.0.0.1”);
 ### 빈 생성자 Config 객체 사용하기
 	Config config = new Config();
-	config.setTargetAddress("http://127.0.0.1");
-	HttpClient client = new HttpClient();
+	config.setTargetAddress("http://127.0.0.1", 8080);
+	HttpClient client = new HttpClient(config);
 ### Config 객체 생성의 여러가지 방법
 HttpClient 객체 생성 방법과 동일합니다.
 ### HTTP 요청 보내기 : GET
