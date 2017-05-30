@@ -6,6 +6,9 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가된 Maven 프로젝트
 ### 빈 생성자 HttpClient 객체 생성해보기
 	HttpClient client = new HttpClient();
+### 요청 주소 세팅
+	HttpClient client = new HttpClient();
+	client.setTargetAddress("http://127.0.0.1", 8080);
 ### HttpClient 객체 생성의 여러가지 방법
 #### URL, 포트, read, connect 타임아웃을 모두 설정하는 경우
 	HttpClient client = new HttpClient(“http://127.0.0.1”, 8080, 5000, 5000);
