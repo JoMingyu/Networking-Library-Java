@@ -3,17 +3,22 @@ HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 J
 
 ## 사용
 ### 프로젝트 구성
-JSON 라이브러리가 적용된 Maven 프로젝트
-### HttpClient 객체 생성해보기
+Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가된 Maven 프로젝트
+### 빈 생성자 HttpClient 객체 생성해보기
 	HttpClient client = new HttpClient();
 ### 객체 생성의 여러가지 방법
-#### 추가 필요
+#### URL, 포트, read, connect 타임아웃을 모두 설정하는 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”, 8080, 5000, 5000);
+#### URL과 포트만 설정하는 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”, 8080);
+#### 80 포트일 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”);
 ### Config 객체 사용하기
 	Config config = new Config();
 	config.setTargetAddress("http://127.0.0.1");
 	HttpClient client = new HttpClient();
 ### Config 객체 생성의 여러가지 방법
-#### 추가 필요
+HttpClient 객체 생성 방법과 동일합니다.
 ### HTTP 요청 보내기 : GET
 #### 헤더와 파라미터가 없는 GET 요청
 	HttpClient client = new HttpClient(config);
