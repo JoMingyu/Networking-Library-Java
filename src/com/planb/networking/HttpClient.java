@@ -60,6 +60,31 @@ public class HttpClient {
 		this.connectTimeout = config.getConnectTimeout();
 	}
 	
+	public String getTargetAddress() {
+		return targetAddress;
+	}
+	public void setTargetAddress(String targetAddress, int port) {
+		if(targetAddress.endsWith("/")) {
+			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+		}
+		
+		this.targetAddress = port == 80 ? targetAddress : targetAddress + ":" + port;
+	}
+	
+	public int getReadTimeout() {
+		return readTimeout;
+	}
+	public void setReadTimeout(int readTimeout) {
+		this.readTimeout = readTimeout;
+	}
+	
+	public int getConnectTimeout() {
+		return connectTimeout;
+	}
+	public void setConnectTimeout(int connectTimeout) {
+		this.connectTimeout = connectTimeout;
+	}
+	
 	public Response post(String uri, Map<String, Object> headers, Map<String, Object> params) {
 		// POST request with parameter map
 		

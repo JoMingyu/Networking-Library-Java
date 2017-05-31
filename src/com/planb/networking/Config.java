@@ -38,8 +38,12 @@ public class Config {
 	public String getTargetAddress() {
 		return targetAddress;
 	}
-	public void setTargetAddress(String targetAddress) {
-		this.targetAddress = targetAddress;
+	public void setTargetAddress(String targetAddress, int port) {
+		if(targetAddress.endsWith("/")) {
+			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+		}
+		
+		this.targetAddress = port == 80 ? targetAddress : targetAddress + ":" + port;
 	}
 	
 	public int getReadTimeout() {
