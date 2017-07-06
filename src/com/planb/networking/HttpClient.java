@@ -26,8 +26,8 @@ public class HttpClient {
 		if(targetAddress.endsWith("/")) {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
 		}
-		
-		this.targetAddress = targetAddress;
+
+		this.targetAddress = port == 80 ? targetAddress : targetAddress + ":" + port;
 		this.readTimeout = readTimeout;
 		this.connectTimeout = connectTimeout;
 	}

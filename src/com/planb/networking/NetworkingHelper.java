@@ -10,13 +10,20 @@ import java.util.Map;
 
 public class NetworkingHelper {
 	private static String validateUri(String targetAddress, String uri) {
-		if(uri.length() == 1 && uri.endsWith("/")) {
-			uri = uri.substring(0, uri.length() - 1);
-		} else if(!uri.startsWith("/")) {
-			uri = "/" + uri;
-		}
-		
-		return targetAddress + uri;
+	    if(!targetAddress.endsWith("/") && !targetAddress.startsWith("/")) {
+	        // address와 uri 사이 '/'가 없는 경우 백업
+	        uri = "/" + uri;
+        }
+
+	    targetAddress += uri;
+	    targetAddress = targetAddress.replaceAll("/+", "/");
+	    // 1개 이상의 '/'을 '/'로 치환
+
+	    if(targetAddress.endsWith("/")) {
+	        targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+        }
+
+		return targetAddress;
 	}
 	
 	static String createRequestAddress(String targetAddress, String uri) {
