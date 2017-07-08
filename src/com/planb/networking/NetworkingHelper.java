@@ -10,49 +10,40 @@ import java.util.Map;
 
 public class NetworkingHelper {
 	private static String validateUri(String targetAddress, String uri) {
-	    if(!targetAddress.endsWith("/") && !targetAddress.startsWith("/")) {
-	        // address와 uri 사이 '/'가 없는 경우 백업
-	        uri = "/" + uri;
-        }
+		if (!targetAddress.endsWith("/") && !targetAddress.startsWith("/")) {
+			uri = "/" + uri;
+		}
 
-	    targetAddress += uri;
-	    
-	    for(int i = 0 ; i < targetAddress.length()-1 ; i ++){
-	    	if(targetAddress.charAt(i) == '/'
-	    			&& targetAddress.charAt(i+1) == '/'
-	    			&& i > 0 && targetAddress.charAt(i-1) != ':'){
-	    		targetAddress = targetAddress.substring(0, i+1)
-	    				+ (targetAddress.length() == i+2 ? "" : targetAddress.substring(i+2, targetAddress.length()));
-	    		i--;
-	    	}
-	    }
-	    
-	    // targetAddress = targetAddress.replaceAll("/+", "/");
-	    // 프로토콜 부분도 제거되지 않도록 수정함.  https:// <- 처럼
-	    // 1개 이상의 '/'을 '/'로 치환
-	    
-	    if(targetAddress.endsWith("/")) {
-	        targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
-        }
-	    
+		targetAddress += uri;
+
+		for (int i = 0; i < targetAddress.length() - 1; i++) {
+			if (targetAddress.charAt(i) == '/' && targetAddress.charAt(i + 1) == '/' && i > 0 && targetAddress.charAt(i - 1) != ':') {
+				targetAddress = targetAddress.substring(0, i + 1) + (targetAddress.length() == i + 2 ? "" : targetAddress.substring(i + 2, targetAddress.length()));
+				i--;
+			}
+		}
+
+		if (targetAddress.endsWith("/")) {
+			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
+		}
+
 		return targetAddress;
 	}
-	
+
 	static String createRequestAddress(String targetAddress, String uri) {
 		// POST request or GET request with no parameter
-		
+
 		return validateUri(targetAddress, uri);
 	}
-	
+
 	static String createRequestAddress(String targetAddress, String uri, Map<String, Object> params) {
 		/*
-		 * GET request with parameter
-		 * URI?key=value&key=value
+		 * GET request with parameter URI?key=value&key=value
 		 */
-		
+
 		StringBuilder requestAddress = new StringBuilder();
 		requestAddress.append(validateUri(targetAddress, uri)).append("?");
-		for(String key : params.keySet()) {
+		for (String key : params.keySet()) {
 			String value = (String) params.get(key);
 			try {
 				requestAddress.append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
@@ -60,18 +51,18 @@ public class NetworkingHelper {
 				e.printStackTrace();
 			}
 		}
-		
+
 		String requestAddressStr = requestAddress.toString();
 		requestAddressStr = requestAddressStr.substring(0, requestAddressStr.length() - 1);
 		return requestAddressStr;
 	}
-	
+
 	static byte[] createParamBytes(Map<String, Object> params) {
 		// Body data to byte[]
-		
+
 		StringBuilder requestData = new StringBuilder();
-		
-		for(String key : params.keySet()) {
+
+		for (String key : params.keySet()) {
 			String value = String.valueOf(params.get(key));
 			try {
 				requestData.append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
@@ -79,39 +70,39 @@ public class NetworkingHelper {
 				e.printStackTrace();
 			}
 		}
-		
+
 		String requestAddressStr = requestData.toString();
 		requestAddressStr = requestAddressStr.substring(0, requestAddressStr.length() - 1);
 		return requestAddressStr.getBytes();
 	}
-	
+
 	static Response getResponse(HttpURLConnection connection) {
 		// Get response from response
-		
+
 		InputStream in = null;
 		try {
 			in = connection.getInputStream();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
-		if(in == null) {
+
+		if (in == null) {
 			return null;
 		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		
+
 		byte[] buf = new byte[1024 * 16];
 		int length;
 		try {
-			while((length = in.read(buf)) != -1) {
+			while ((length = in.read(buf)) != -1) {
 				out.write(buf, 0, length);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		Response response = new Response();;
-		
+
+		Response response = new Response();
+
 		try {
 			String responseBody = new String(out.toByteArray(), "UTF-8");
 			response.setResponseBody(responseBody);
@@ -121,7 +112,7 @@ public class NetworkingHelper {
 			e.printStackTrace();
 			return null;
 		}
-		
+
 		connection.disconnect();
 		return response;
 	}

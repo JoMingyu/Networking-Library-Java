@@ -12,13 +12,14 @@ public class Config {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
 		}
 		
-		this.targetAddress = targetAddress;
+		this.targetAddress = port == 80 ? targetAddress : targetAddress + ":" + port;
 		this.readTimeout = readTimeout;
 		this.connectTimeout = connectTimeout;
 	}
 	
 	public Config(String targetAddress, int port) {
 		// Constructor with address, port
+		
 		if(targetAddress.endsWith("/")) {
 			targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
 		}

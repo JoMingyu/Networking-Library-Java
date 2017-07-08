@@ -90,23 +90,18 @@ public class HttpClient {
 	}
 	
 	@Deprecated
-	public Response get(String uri, Map<String, Object> headers,
-			Map<String, Object> params) {
-		return request(new Request.RequestBuilder(uri).setHeaders(headers)
-				.setParams(params).setRequestType(RequestType.GET).build());
-	}
-	@Deprecated
-	public Response post(String uri, Map<String, Object> headers,
-			Map<String, Object> params) {
-		return request(new Request.RequestBuilder(uri).setHeaders(headers)
-				.setParams(params).setRequestType(RequestType.POST).build());
+	public Response get(String uri, Map<String, Object> headers, Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers).setParams(params).setRequestType(RequestType.GET).build());
 	}
 	
 	@Deprecated
-	public Response delete(String uri, Map<String, Object> headers,
-			Map<String, Object> params) {
-		return request(new Request.RequestBuilder(uri).setHeaders(headers)
-				.setParams(params).setRequestType(RequestType.DELETE).build());
+	public Response post(String uri, Map<String, Object> headers, Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers).setParams(params).setRequestType(RequestType.POST).build());
+	}
+	
+	@Deprecated
+	public Response delete(String uri, Map<String, Object> headers, Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers).setParams(params).setRequestType(RequestType.DELETE).build());
 	}
 
 	@Deprecated
@@ -117,8 +112,7 @@ public class HttpClient {
 		// Request address with uri
 		
 		try {
-			connect(requestAddress, new Request.RequestBuilder(uri).setHeaders(headers)
-					.setParam(requestObject).setRequestType(RequestType.POST).build());
+			connect(requestAddress, new Request.RequestBuilder(uri).setHeaders(headers).setParam(requestObject).setRequestType(RequestType.POST).build());
 			
 			wr = new OutputStreamWriter(connection.getOutputStream());
 			wr.write(requestObject.toString());
@@ -131,18 +125,18 @@ public class HttpClient {
 		}
 	}
 	
-	private final Response request(Request request){
+	private final Response request(Request request) {
 		// all Request Include
 		
 		String requestAddress = null;
-		if(request.getRequestType() != RequestType.POST
-				&& request.getParams() != null && request.getParams().size() > 0) {
+		if(request.getRequestType() != RequestType.POST && request.getParams() != null && request.getParams().size() > 0) {
 			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, request.getUri(), request.getParams());
 			// Request address with uri and parameter
-		} else {
+		} else if(request.getRequestType() != RequestType.POST && (request.getParams() == null || request.getParams().size() == 0)) {
 			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, request.getUri());
 			// Request address with uri
 		}
+		
 		try {
 			connect(requestAddress, request);
 			
@@ -165,9 +159,8 @@ public class HttpClient {
 		}
 	}
 	
-	private final void connect(String requestAddress, Request request) throws IOException{
+	private final void connect(String requestAddress, Request request) throws IOException {
 		url = new URL(requestAddress);
-		System.out.println(requestAddress);
 		connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(request.getRequestType().getName());
 		connection.setDoOutput(true);
