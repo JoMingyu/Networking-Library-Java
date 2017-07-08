@@ -9,27 +9,27 @@ public class Response {
 	private String responseBody;
 	private int responseCode;
 
-	public Map<String, List<String>> getResponseHeader() {
-		return responseHeader;
-	}
-
 	public void setResponseHeader(Map<String, List<String>> responseHeader) {
 		this.responseHeader = responseHeader;
 	}
-
-	public String getResponseBody() {
-		return responseBody;
+	
+	public Map<String, List<String>> getResponseHeader() {
+		return responseHeader;
 	}
 
 	public void setResponseBody(String responseBody) {
 		this.responseBody = responseBody;
 	}
-
-	public int getResponseCode() {
-		return responseCode;
+	
+	public String getResponseBody() {
+		return responseBody;
 	}
 
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
+	}
+
+	public int getResponseCode() {
+		return responseCode;
 	}
 }

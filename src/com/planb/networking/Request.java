@@ -6,7 +6,24 @@ import java.util.Map;
 import org.json.JSONObject;
 
 public class Request {
-	private RequestType type = null;
+	public enum Type {
+		GET, POST, DELETE;
+		private final String name;
+
+		private Type(String name) {
+			this.name = name;
+		}
+
+		private Type() {
+			this.name = toString();
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+	
+	private Type type = null;
 	private String uri = null;
 	private Map<String, Object> headers = null;
 	private Map<String, Object> params = null;
@@ -20,7 +37,7 @@ public class Request {
 		this.json = json;
 	}
 
-	public RequestType getRequestType() {
+	public Type getType() {
 		return type;
 	}
 
@@ -41,7 +58,7 @@ public class Request {
 	}
 
 	public static class RequestBuilder {
-		private RequestType type = RequestType.GET;
+		private Type type = Type.GET;
 		private String uri = "";
 		private Map<String, Object> headers = null;;
 		private Map<String, Object> params = null;
@@ -64,7 +81,7 @@ public class Request {
 			return this;
 		}
 
-		public RequestBuilder setRequestType(RequestType type) {
+		public RequestBuilder setRequestType(Type type) {
 			if (type != null) {
 				this.type = type;
 			}
