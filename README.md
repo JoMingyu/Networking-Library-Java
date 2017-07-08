@@ -25,6 +25,60 @@ HttpClient 객체 생성 방법과 동일합니다.
 ### HTTP 요청 보내기 : GET
 #### 헤더와 파라미터가 없는 GET 요청
 	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().build());
+#### GET 요청에 헤더 붙이기
+	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().addHeader(“key”, “value”).build());
+#### 헤더와 파라미터가 있는 GET 요청
+	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().addHeader(“key”, “value”).addParam(“key, “value”).build());
+#### GET 요청의 응답 얻어오기
+	HttpClient client = new HttpClient(config);
+	Response res = client.requestUri(new Request.RequestBuilder().build());
+	Map<String, List<String>> header = response.getResponseHeader();
+	String responseBody = response.getResponseBody();
+	int responseCode = response.getResponseCode();
+### HTTP 요청 보내기 : POST
+#### 요청 본문이 없는 POST 요청
+	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).build());
+#### 헤더가 있는 POST 요청
+	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).addHeader(“key”, “value”).build());
+#### 헤더와 요청 본문이 있는 POST 요청
+	HttpClient client = new HttpClient(config);
+	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).addHeader(“key”, “value”).addParam(“key”, “value”).build());
+#### POST 요청의 응답 얻어오기
+	HttpClient client = new HttpClient(config);
+	Response response = client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).build());
+	Map<String, List<String>> header = response.getResponseHeader();
+	String responseBody = response.getResponseBody();
+	int responseCode = response.getResponseCode();
+
+## 사용(Legacy)
+### 프로젝트 구성
+Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가된 Maven 프로젝트
+### 빈 생성자 HttpClient 객체 생성해보기
+	HttpClient client = new HttpClient();
+### 요청 주소 세팅
+	HttpClient client = new HttpClient();
+	client.setTargetAddress("http://127.0.0.1", 8080);
+### HttpClient 객체 생성의 여러가지 방법
+#### URL, 포트, read, connect 타임아웃을 모두 설정하는 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”, 8080, 5000, 5000);
+#### URL과 포트만 설정하는 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”, 8080);
+#### 80 포트일 경우
+	HttpClient client = new HttpClient(“http://127.0.0.1”);
+### 빈 생성자 Config 객체 사용하기
+	Config config = new Config();
+	config.setTargetAddress("http://127.0.0.1", 8080);
+	HttpClient client = new HttpClient(config);
+### Config 객체 생성의 여러가지 방법
+HttpClient 객체 생성 방법과 동일합니다.
+### HTTP 요청 보내기 : GET
+#### 헤더와 파라미터가 없는 GET 요청
+	HttpClient client = new HttpClient(config);
 	client.get("/test-uri", new HashMap<String, Object>(), new HashMap<String, Object>());
 #### GET 요청에 헤더 붙이기
 	HttpClient client = new HttpClient(config);
