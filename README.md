@@ -1,6 +1,9 @@
 # Simple-Networking-Library
 HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 Java 라이브러리
 
+# Simple-Networking-Library
+HttpURLConnection을 이용해 REST로 구성된 서버와 통신하기 위한 Java 라이브러리
+
 ## 사용
 ### 프로젝트 구성
 Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가된 Maven 프로젝트
@@ -41,21 +44,22 @@ HttpClient 객체 생성 방법과 동일합니다.
 ### HTTP 요청 보내기 : POST
 #### 요청 본문이 없는 POST 요청
 	HttpClient client = new HttpClient(config);
-	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).build());
+	client.requestUri(new Request.RequestBuilder().setRequestType(Request.Type.POST).build());
 #### 헤더가 있는 POST 요청
 	HttpClient client = new HttpClient(config);
-	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).addHeader(“key”, “value”).build());
+	client.requestUri(new Request.RequestBuilder().setRequestType(Request.Type.POST).addHeader(“key”, “value”).build());
 #### 헤더와 요청 본문이 있는 POST 요청
 	HttpClient client = new HttpClient(config);
-	client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).addHeader(“key”, “value”).addParam(“key”, “value”).build());
+	client.requestUri(new Request.RequestBuilder().setRequestType(Request.Type.POST).addHeader(“key”, “value”).addParam(“key”, “value”).build());
 #### POST 요청의 응답 얻어오기
 	HttpClient client = new HttpClient(config);
-	Response response = client.requestUri(new Request.RequestBuilder().setRequestType(RequestType.POST).build());
+	Response response = client.requestUri(new Request.RequestBuilder().setRequestType(Request.Type.POST).build());
 	Map<String, List<String>> header = response.getResponseHeader();
 	String responseBody = response.getResponseBody();
 	int responseCode = response.getResponseCode();
 
-## 사용(Legacy)
+
+## 사용(Deprecated)
 ### 프로젝트 구성
 Build Path에 JSON 라이브러리가 적용되었거나, dependency가 추가된 Maven 프로젝트
 ### 빈 생성자 HttpClient 객체 생성해보기
