@@ -84,42 +84,32 @@ public class HttpClient {
 	public void setConnectTimeout(int connectTimeout) {
 		this.connectTimeout = connectTimeout;
 	}
-	
-	public Response post(String uri, Map<String, Object> headers, Map<String, Object> params) {
-		// POST request with parameter map
-		
-		String requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
-		// Request address with uri
-		
-		try {
-			url = new URL(requestAddress);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setDoOutput(true);
-			// Enable do output
-			connection.setReadTimeout(this.readTimeout);
-			connection.setConnectTimeout(this.connectTimeout);
-			
-			if(headers != null && headers.size() > 0) {
-				for(String key : headers.keySet()) {
-					connection.setRequestProperty(key, (String) headers.get(key));
-				}
-			}
-			
-			if(params != null && params.size() > 0) {
-				out = connection.getOutputStream();
-				out.write(NetworkingHelper.createParamBytes(params));
-				// Send byte[] data if body data is exists
-				out.flush();
-			}
-			
-			return NetworkingHelper.getResponse(connection);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+
+	public Response requestUri(Request request){
+		return request(request);
 	}
 	
+	@Deprecated
+	public Response get(String uri, Map<String, Object> headers,
+			Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers)
+				.setParams(params).setRequestType(RequestType.GET).build());
+	}
+	@Deprecated
+	public Response post(String uri, Map<String, Object> headers,
+			Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers)
+				.setParams(params).setRequestType(RequestType.POST).build());
+	}
+	
+	@Deprecated
+	public Response delete(String uri, Map<String, Object> headers,
+			Map<String, Object> params) {
+		return request(new Request.RequestBuilder(uri).setHeaders(headers)
+				.setParams(params).setRequestType(RequestType.DELETE).build());
+	}
+
+	@Deprecated
 	public Response post(String uri, Map<String, Object> headers, JSONObject requestObject) {
 		// POST request with JSON data
 		
@@ -127,19 +117,8 @@ public class HttpClient {
 		// Request address with uri
 		
 		try {
-			url = new URL(requestAddress);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("POST");
-			connection.setDoOutput(true);
-			// Enable do output
-			connection.setReadTimeout(this.readTimeout);
-			connection.setConnectTimeout(this.connectTimeout);
-			
-			if(headers != null && headers.size() > 0) {
-				for(String key : headers.keySet()) {
-					connection.setRequestProperty(key, (String) headers.get(key));
-				}
-			}
+			connect(requestAddress, new Request.RequestBuilder(uri).setHeaders(headers)
+					.setParam(requestObject).setRequestType(RequestType.POST).build());
 			
 			wr = new OutputStreamWriter(connection.getOutputStream());
 			wr.write(requestObject.toString());
@@ -152,28 +131,31 @@ public class HttpClient {
 		}
 	}
 	
-	public Response get(String uri, Map<String, Object> headers, Map<String, Object> params) {
-		// GET request
+	private final Response request(Request request){
+		// all Request Include
 		
 		String requestAddress = null;
-		if(params != null && params.size() > 0) {
-			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri, params);
+		if(request.getRequestType() != RequestType.POST
+				&& request.getParams() != null && request.getParams().size() > 0) {
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, request.getUri(), request.getParams());
 			// Request address with uri and parameter
 		} else {
-			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
+			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, request.getUri());
 			// Request address with uri
 		}
 		try {
-			url = new URL(requestAddress);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setReadTimeout(this.readTimeout);
-			connection.setConnectTimeout(this.connectTimeout);
+			connect(requestAddress, request);
 			
-			if(headers != null && headers.size() > 0) {
-				for(String key : headers.keySet()) {
-					connection.setRequestProperty(key, (String) headers.get(key));
-				}
+			if(request.getRequestType() == RequestType.POST && request.getParams() != null && request.getParams().size() > 0) {
+				out = connection.getOutputStream();
+				out.write(NetworkingHelper.createParamBytes(request.getParams()));
+				// Send byte[] data if body data is exists
+				out.flush();
+			}
+			if(request.getRequestType() == RequestType.POST && request.getJson() != null && request.getJson().length() > 0){
+				wr = new OutputStreamWriter(connection.getOutputStream());
+				wr.write(request.getJson().toString());
+				wr.flush();
 			}
 			
 			return NetworkingHelper.getResponse(connection);
@@ -183,34 +165,22 @@ public class HttpClient {
 		}
 	}
 	
-	public Response delete(String uri, Map<String, Object> headers, Map<String, Object> params) {
-		// GET request
+	private final void connect(String requestAddress, Request request) throws IOException{
+		url = new URL(requestAddress);
+		System.out.println(requestAddress);
+		connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod(request.getRequestType().getName());
+		connection.setDoOutput(true);
+		// Enable do output
+		connection.setReadTimeout(this.readTimeout);
+		connection.setConnectTimeout(this.connectTimeout);
 		
-		String requestAddress = null;
-		if(params != null && params.size() > 0) {
-			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri, params);
-			// Request address with uri and parameter
-		} else {
-			requestAddress = NetworkingHelper.createRequestAddress(this.targetAddress, uri);
-			// Request address with uri
-		}
-		try {
-			url = new URL(requestAddress);
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("DELETE");
-			connection.setReadTimeout(this.readTimeout);
-			connection.setConnectTimeout(this.connectTimeout);
-			
-			if(headers != null && headers.size() > 0) {
-				for(String key : headers.keySet()) {
-					connection.setRequestProperty(key, (String) headers.get(key));
-				}
+		if(request.getHeaders() != null && request.getHeaders().size() > 0) {
+			for(Map.Entry<String, Object> ent : request.getHeaders().entrySet()) {
+				connection.setRequestProperty(ent.getKey(), (String) ent.getValue());
 			}
-			
-			return NetworkingHelper.getResponse(connection);
-		} catch(IOException e) {
-			e.printStackTrace();
-			return null;
 		}
+		
+		connection.connect();
 	}
 }

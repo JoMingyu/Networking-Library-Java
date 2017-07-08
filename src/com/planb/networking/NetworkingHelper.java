@@ -16,13 +16,25 @@ public class NetworkingHelper {
         }
 
 	    targetAddress += uri;
-	    targetAddress = targetAddress.replaceAll("/+", "/");
+	    
+	    for(int i = 0 ; i < targetAddress.length()-1 ; i ++){
+	    	if(targetAddress.charAt(i) == '/'
+	    			&& targetAddress.charAt(i+1) == '/'
+	    			&& i > 0 && targetAddress.charAt(i-1) != ':'){
+	    		targetAddress = targetAddress.substring(0, i+1)
+	    				+ (targetAddress.length() == i+2 ? "" : targetAddress.substring(i+2, targetAddress.length()));
+	    		i--;
+	    	}
+	    }
+	    
+	    // targetAddress = targetAddress.replaceAll("/+", "/");
+	    // 프로토콜 부분도 제거되지 않도록 수정함.  https:// <- 처럼
 	    // 1개 이상의 '/'을 '/'로 치환
-
+	    
 	    if(targetAddress.endsWith("/")) {
 	        targetAddress = targetAddress.substring(0, targetAddress.length() - 1);
         }
-
+	    
 		return targetAddress;
 	}
 	
@@ -43,7 +55,7 @@ public class NetworkingHelper {
 		for(String key : params.keySet()) {
 			String value = (String) params.get(key);
 			try {
-				requestAddress.append(key).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
+				requestAddress.append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
@@ -62,7 +74,7 @@ public class NetworkingHelper {
 		for(String key : params.keySet()) {
 			String value = String.valueOf(params.get(key));
 			try {
-				requestData.append(key).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
+				requestData.append(URLEncoder.encode(key, "UTF-8")).append("=").append(URLEncoder.encode(value, "UTF-8")).append("&");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
